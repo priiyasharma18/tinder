@@ -42,7 +42,7 @@ app.post('/signup', async (req, res) => {
                 email: email,
                 password: hashPassword
             })
-            //console.log(firstName)
+            console.log(firstName)
 
             await user.save()
 
