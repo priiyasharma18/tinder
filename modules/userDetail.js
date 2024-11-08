@@ -3,6 +3,12 @@ const validator = require('validator')
 
 const userDetailSchema = mongoose.Schema(
     {
+        userId:{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"User",
+            required:true
+        },
+
         userName: { 
             type: String, 
             required: true,
@@ -20,7 +26,8 @@ const userDetailSchema = mongoose.Schema(
             default:'Hi there! I am using tinder' 
         },
         age: {
-             type: Date,
+             type: Number,
+             maxLength:10,
               required: true 
             },
         location: { 
@@ -57,7 +64,7 @@ const userDetailSchema = mongoose.Schema(
         intrested:{
             type:String,
              required:true,
-             enum:["women","Male"]
+             enum:["women","male"]
         }
 
     }

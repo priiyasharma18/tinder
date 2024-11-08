@@ -3,6 +3,8 @@ const express = require("express")
 const app = express()
 const bodyParser = require('body-parser')
 const cors=require('cors')
+const user=require('./routes/user')
+const connection=require('./routes/connectionRoute')
 
 const port = 8081;
 const connectDb = require('./config/database')
@@ -18,6 +20,8 @@ const auth=require('./routes/auth')
 
  app.use('/',auth)  //
  app.use(cookieParser())
+ app.use('/',user)
+ app.use('/',connection)
 // app.use('/login',)
 
 

@@ -23,10 +23,10 @@ exports.signup=async (req, res) => {
         const isEmailexist = await userModel.findOne({
             email: email
         })
-
+//console.log(isEmailexist,'email')
         if (isEmailexist) {
-            throw new Error('credential error.')
-        } else {
+            throw new Error('credential error..') 
+        } else { 
             //encrypting password
             const hashPassword = await bcrypt.hash(password, 10);
             const user = await new userModel({
@@ -35,13 +35,16 @@ exports.signup=async (req, res) => {
                 email: email,
                 password: hashPassword
             })
-            console.log(firstName)
+           // console.log(firstName)
 
             await user.save()
+             const token= jwt.sign(
+                {data:user._id},
+                process.env.JWT_SECRET,
+                {expiresIn:"1h"})
 
-            res.status(200).json({
+            res.status(200).cookie('token',token).json({
                 data: user
-
             })
 
         }
@@ -80,8 +83,7 @@ exports.login=async (req, res) => {
           //console.log(token,'token')
             return res.status(200).cookie('token',token).json({
                 status:"success",
-                data:isUserExist._id,
-                token
+                data:isUserExist._id
             })
           
         }
@@ -94,27 +96,24 @@ exports.login=async (req, res) => {
     }
 }
 
-exports.isAuthenticated=async(req,resp,next)=>{
-   try{
-    const {token}=req.cookies
-    if(!token){
-        resp.status(400).json({
-            status:"failed",
-            message:"token required..."
-        })
-    }
-    
-   const verifyToken=  jwt.verify(token,process.env.JWT_SECRET)
-   console.log(verifyToken,'isauthenticated')
-    
-   const user= await userModel.findById(verifyToken.data)
-   next()
-
-
-   }catch(err){
-       resp.status(400).json({
-        status:"error",
-        message: err.message
+exports.logout=async(req,res)=>{
+    try{
+      
+        res.status(200).cookie('token',null,{
+            expires: new Date(Date.now()),
+            maxAge:0*1000,
+            httpOnly: true,
+        }).json({
+            status:"success",
+            message:"loggeg out"
+        })     
+    }catch(err){
+    res.status(400).json({
+    status:"failed",
+    message:err.message
     })
-   }
+    }
 }
+
+
+
