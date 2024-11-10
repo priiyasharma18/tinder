@@ -5,7 +5,7 @@ const bodyParser = require('body-parser')
 const cors=require('cors')
 const user=require('./routes/user')
 const connection=require('./routes/connectionRoute')
-
+const matchRoute=require('./routes/matchDetaileRoute')
 const port = 8081;
 const connectDb = require('./config/database')
 const dotenv=require('dotenv').config();
@@ -22,6 +22,7 @@ const auth=require('./routes/auth')
  app.use(cookieParser())
  app.use('/',user)
  app.use('/',connection)
+app.use('/',matchRoute)
 // app.use('/login',)
 
 
