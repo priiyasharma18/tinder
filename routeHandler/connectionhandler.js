@@ -3,16 +3,23 @@ const userModel=require('../modules/user')
 
 exports.connectionRequest=async (req,res)=>{
     try{
-
+ 
         const status=req.params.status
         const receiverId=req.params.receiverid
         const senderId=req.user._id
-
+       // console.log(senderId,'sender id')
         const isReceiverExist=await userModel.findById(receiverId)
         if(!isReceiverExist){
             throw new Error("this connection is not possible.")
         }
-        //chek whether the sender and receiver is same if yes then err throw youb cannot send self request
+         //check whether the sender and receiver is same if yes then err throw youb cannot send self request
+         // .equals() is used to comapre object id returned by mongo and normal receiver id
+         if(senderId.equals(receiverId)){
+            throw new Error("You can not send self request..")
+
+         }
+
+
         const allowedStatus=['intrested','notintrested']
          const isAllowed=allowedStatus.includes(status)
          if(!isAllowed){
@@ -30,7 +37,7 @@ exports.connectionRequest=async (req,res)=>{
             await connection.save()
             res.status(200).json({
                 status:"success",
-                message:"request sent successfully."
+                message:`${req.user.firstName} ${status} in you.` 
             })
          }
     }catch(e){
@@ -40,3 +47,49 @@ exports.connectionRequest=async (req,res)=>{
        }) 
     }
 }
+
+exports.requestReview=async(req,res)=>{
+    try{
+
+        // step 1-> status received
+        //step 2 -> received userId of requested user
+        //step 3-> status must be received as accepted or rejected
+        // step 4 -> requested Id will be sender id in database 
+        //step 5 -> check whether the requestedId is present in database or not.
+
+        const status=req.params.status
+        const receiverId=req.params.requestid
+
+        const allowedStatus=['accepted','rejected'] 
+        const isAllowed=allowedStatus.includes(status)
+
+        if(!isAllowed){
+          throw new Error("status not allowed..")
+        }
+        const findConnection=await connectionModel.findOne({_id:receiverId,receiverId:req.user._id,status:'intrested'})
+         //receiver id must be the logged in Id to proceed further function to accept or reject...because you are the receiver of request
+
+        if(!findConnection){
+            throw new Error("connection not found..")
+        }
+        else
+        {
+           findConnection.status=status
+          //const updatedData= await connectionModel.findByIdAndUpdate(receiverId,status)
+           
+         //await updatedData.save()
+         await findConnection.save()
+           res.status(200).json({
+            status:"success",
+            data:findConnection
+           })
+        }
+
+    }catch(e){
+        res.status(400).json({
+            status:"failed",
+            message:e.message
+           })  
+    }
+}
+
