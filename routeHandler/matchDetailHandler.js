@@ -9,11 +9,11 @@ exports.findAllrequest = async (req, res) => {
         //b-> the status filter which is saved as intrested ..
 
         const userId = req.user._id
-        const pendingRequest = await connectionModel.find({ receiverId: userId, status: "intrested" }).populate("senderId","firstName lastName email")
+        const pendingRequest = await connectionModel.find({ receiverId: userId, status: "intrested" }).populate("senderId", "firstName lastName email")
 
-        if(pendingRequest.length==0){
+        if (pendingRequest.length == 0) {
             return res.status(404).json({
-                status:"You do not any  have request"
+                status: "You do not any  have request"
             })
         }
         console.log(pendingRequest, "all pending request")
@@ -31,4 +31,41 @@ exports.findAllrequest = async (req, res) => {
             message: e.message
         })
     }
+}
+
+exports.allMatch = async (req, res) => {
+    try {
+
+        //step 1 -> we can develope connection by two ways
+        // a-> received request by someone
+        //b -> sent request and accepted by that user 
+        // c-> in case of received request log in user will be receiver 
+        // d-> in case of sent request log in user will be sender
+
+        const loggedInuser = req.user._id
+
+        const myMatch = await connectionModel.find({
+            $or: [
+                { senderId: loggedInuser, status: "accepted" },
+                { receiverId: loggedInuser, status: "accepted" }  //revise this point 
+            ]
+        })
+        if (myMatch.length == 0) {
+            return res.status(404).json({
+                status: "success",
+                message: "No matches found."
+            })
+        }
+        return res.status(200).json({
+            status:"success",
+            data:myMatch
+        })
+    }
+    catch (e) {
+        res.status(400).json({
+            status: "failed",
+            message: e.message
+        })
+    }
+
 }

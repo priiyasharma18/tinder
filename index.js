@@ -10,6 +10,7 @@ const port = 8081;
 const connectDb = require('./config/database')
 const dotenv=require('dotenv').config();
 const cookieParser=require('cookie-parser')
+const feedRoute=require('./routes/feed')
 
 //app.use(bodyParser)
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -23,6 +24,7 @@ const auth=require('./routes/auth')
  app.use('/',user)
  app.use('/',connection)
 app.use('/',matchRoute)
+app.use('/',feedRoute)
 // app.use('/login',)
 
 
