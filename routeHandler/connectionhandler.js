@@ -1,5 +1,6 @@
 const connectionModel=require('../modules/connection')
 const userModel=require('../modules/user')
+const UserDetailModel=require('../modules/userDetail')
 
 exports.connectionRequest=async (req,res)=>{
     try{
@@ -7,6 +8,18 @@ exports.connectionRequest=async (req,res)=>{
         const status=req.params.status
         const receiverId=req.params.receiverid
         const senderId=req.user._id
+        const senderProfileId=await UserDetailModel.findOne(
+            {
+                userId:senderId
+            }
+        )
+
+        const receiverProfileId= await UserDetailModel.findOne(
+            {
+                userId:receiverId
+            }
+    )
+//console.log(senderProfileId,"senderprofile id",receiverProfileId,'receiver profile id')
        // console.log(senderId,'sender id')
         const isReceiverExist=await userModel.findById(receiverId)
         if(!isReceiverExist){
@@ -32,12 +45,12 @@ exports.connectionRequest=async (req,res)=>{
          }
          else{
             const connection=  await new connectionModel({
-                senderId,receiverId,status
+                senderId,senderProfileId,receiverId,receiverProfileId,status
             })
             await connection.save()
             res.status(200).json({
                 status:"success",
-                message:`${req.user.firstName} ${status} in you.` 
+                message:`${req.user.firstName}  is ${status} in you.` 
             })
          }
     }catch(e){

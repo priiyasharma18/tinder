@@ -9,7 +9,7 @@ exports.findAllrequest = async (req, res) => {
         //b-> the status filter which is saved as intrested ..
 
         const userId = req.user._id
-        const pendingRequest = await connectionModel.find({ receiverId: userId, status: "intrested" }).populate("senderId", "firstName lastName email")
+        const pendingRequest = await connectionModel.find({ receiverId: userId, status: "intrested" }).populate("senderProfileId", "userName image bio location age gender intrested")
 
         if (pendingRequest.length == 0) {
             return res.status(404).json({
@@ -49,7 +49,7 @@ exports.allMatch = async (req, res) => {
                 { senderId: loggedInuser, status: "accepted" },
                 { receiverId: loggedInuser, status: "accepted" }  //revise this point 
             ]
-        })
+        }).populate("senderProfileId", "userName image bio location age gender intrested").populate("receiverProfileId", "userName image bio location age gender intrested")
         if (myMatch.length == 0) {
             return res.status(404).json({
                 status: "success",

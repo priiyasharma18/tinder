@@ -1,5 +1,6 @@
 const connectionModel = require('../modules/connection')
 const userModel = require('../modules/user')
+const UserDetailModel=require('../modules/userDetail')
 
 
 const feed = async (req, res) => {
@@ -34,13 +35,25 @@ const feed = async (req, res) => {
             restrictedId.push(element.receiverId)
         })
         
+        //check mongo queruy operators for detailed but here we are blocking the self id in the feed
+        //and also we are filtering the users with already interaction with login user exist 
+
         const feedUser= await userModel.find({
-            _id: { $nin:restrictedId}
+             $and: [{_id: { $nin:restrictedId }}, { _id: { $ne: loggedInId } }  ] 
         }).select('firstName lastName _id').skip((page-1)*limit).limit(limit)
 
+        const feedUserArr=[]
+        feedUser.forEach(element=>{
+            feedUserArr.push(element._id)
+        }
+
+        )
+        const feedUsersProfile= await UserDetailModel.find({
+            userId: { $in:feedUserArr}
+        })
         res.status(200).json({
             status: "success",
-            feedData:feedUser
+            feedData:feedUsersProfile,feedUser
         })
 
     } catch (e) {
