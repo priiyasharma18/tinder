@@ -1,0 +1,41 @@
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+
+  .navbar {
+    width:100%;
+    border:2px solid red;
+    height:10vh;
+    position:sticky;
+    background-image: linear-gradient(to bottom,rgb(24, 23, 23),black );
+    color:#FFF
+  }
+
+  .navbar .first{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    background-image: linear-gradient(to bottom,rgb(24, 23, 23),black );
+    box-shadow: inset;
+  }
+.navbar div{
+    
+    background-image: black;
+}
+  .navbar .second{
+    display: flex;
+    background-image: linear-gradient(to bottom,rgb(24, 23, 23),black );
+    
+   
+  }
+
+  .navbar .second-child{
+    display: flex;
+    
+    justify-content: end;
+    background-image: linear-gradient(to bottom,rgb(24, 23, 23),black );
+  }
