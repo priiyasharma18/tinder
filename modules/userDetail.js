@@ -64,7 +64,7 @@ const userDetailSchema = mongoose.Schema(
         intrested:{
             type:String,
              required:true,
-             enum:["women","male"]
+             enum:["male","female"]
         }
 
     }

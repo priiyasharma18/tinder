@@ -38,6 +38,7 @@ exports.signup=async (req, res) => {
            // console.log(firstName)
 
             await user.save()
+            console.log(user,'checking what user carries')
              const token= jwt.sign(
                 {data:user._id},
                 process.env.JWT_SECRET,
