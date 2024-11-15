@@ -1,27 +1,5 @@
 {
-<<<<<<< HEAD
-  "name": "backend",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "start": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "priya",
-  "license": "ISC",
-  "description": "",
-  "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "body-parser": "^1.20.3",
-    "cookie-parser": "^1.4.7",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
-    "express": "^4.21.1",
-    "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.8.0",
-    "nodemon": "^3.1.7",
-    "validator": "^13.12.0"
-=======
+
   "name": "tinder",
   "version": "0.1.0",
   "private": true,
@@ -57,6 +35,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
->>>>>>> 4c68c07 (Initialize project using Create React App)
+
   }
 }
